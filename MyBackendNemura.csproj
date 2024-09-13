@@ -1,13 +1,63 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- El SDK define el tipo de proyecto que estamos usando. 
+       En este caso, es un proyecto web de ASP.NET Core. -->
 
   <PropertyGroup>
+    <!-- Aquí se definen las propiedades del proyecto, como el marco de trabajo y configuraciones generales -->
+
     <TargetFramework>net8.0</TargetFramework>
+    <!-- El proyecto está configurado para usar .NET 8.0 como el marco de trabajo principal. -->
+
     <Nullable>enable</Nullable>
+    <!-- Habilita las anotaciones y advertencias de referencia nula en todo el proyecto,
+         ayudando a detectar posibles errores con valores nulos. -->
+
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Habilita la inclusión automática de espacios de nombres comunes,
+         lo que simplifica el código y evita tener que escribir los "using" más utilizados. -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <!-- Este grupo contiene las referencias a los paquetes NuGet que el proyecto necesita. 
+         Los paquetes son bibliotecas externas que agregan funcionalidades adicionales. -->
+
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <!-- Paquete que permite cargar variables de entorno desde archivos .env,
+         útil para manejar configuraciones sensibles como claves o conexiones. -->
+
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+    <!-- Paquete para manejar autenticación JWT (JSON Web Tokens) en aplicaciones ASP.NET Core,
+         utilizado para implementar seguridad en APIs. -->
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <!-- Paquete que proporciona soporte para Entity Framework Core, un ORM para trabajar con bases de datos
+         en aplicaciones .NET. -->
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- Paquete de diseño para Entity Framework Core, que proporciona herramientas necesarias 
+         para generar migraciones y realizar operaciones de diseño en la base de datos. -->
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- Proporciona herramientas CLI (línea de comandos) para trabajar con Entity Framework Core,
+         permitiendo crear migraciones y actualizar bases de datos directamente desde la consola. -->
+
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+    <!-- Paquete para usar Entity Framework Core con bases de datos MySQL. 
+         Pomelo es una implementación popular para trabajar con MySQL en proyectos .NET. -->
+
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
+    <!-- Paquete que agrega soporte para Swagger, una herramienta para generar documentación 
+         interactiva para APIs desarrolladas con ASP.NET Core. -->
+
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
+    <!-- Paquete para trabajar con tokens JWT en aplicaciones .NET, útil para manejar la autenticación
+         y autorización en aplicaciones basadas en API. -->
   </ItemGroup>
 
 </Project>
