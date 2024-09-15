@@ -86,7 +86,15 @@ builder.Services.AddCors(options =>
 });
 
 // Añadimos soporte para controladores (MVC o API Controllers).
-builder.Services.AddControllers();
+// Esto permite que la aplicación maneje solicitudes HTTP y devuelva respuestas usando controladores.
+builder.Services.AddControllers()
+
+    // Configura Newtonsoft.Json para la serialización y deserialización de JSON.
+    // Esto permite personalizar cómo se maneja el JSON, incluyendo la conversión de enums a strings.
+    .AddNewtonsoftJson(options =>
+        // Añade un convertidor para enums que convierte los valores del enum a strings en lugar de números.
+        // Esto hace que los enums se representen como sus nombres en lugar de valores numéricos en el JSON.
+        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
 
 // Configuramos Swagger, que es una herramienta que genera documentación interactiva para la API.
 // OpenAPI es una especificación estándar para la documentación de APIs.
