@@ -1,39 +1,44 @@
+// Importamos las librerías necesarias para trabajar con controladores y el acceso a la base de datos.
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
 
 namespace MyBackendNemura.Controllers.V1.Projects;
 
+// Definimos el controlador para manejar las solicitudes relacionadas con la eliminación de proyectos.
 [ApiController]
 [Route("api/v1/projects")]
 public class ProjectsDeleteController : ControllerBase
 {
-    // Esta propiedad es nuestra llave para entrar a la base de datos.
+    // Esta propiedad se utiliza para interactuar con la base de datos.
     private readonly ApplicationDbContext Context;
 
-    // Builder. Este constructor se va a encargar de hacerme la conexión con la base de datos con ayuda de la llave.
+    // Constructor del controlador, donde inyectamos la instancia del contexto de la base de datos.
+    // El contexto es necesario para realizar operaciones CRUD sobre la base de datos.
     public ProjectsDeleteController(ApplicationDbContext context)
     {
         Context = context;
     }
 
-    // Este método va a ser llamado cuando se quiera borrar un proyecto por el Id.
+    // Método para manejar solicitudes HTTP DELETE. Este método elimina un proyecto específico usando su ID.
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        // Primero, buscamos el proyecto en la base de datos.
+        // Buscamos el proyecto en la base de datos por su ID. Si no lo encontramos, 'projectToRemove' será null.
         var projectToRemove = await Context.Projects.FindAsync(id);
 
-        // Si el proyecto no existe, devolvemos un mensaje de error.
+        // Si no encontramos el proyecto, devolvemos una respuesta con un estado 404 (Not Found).
         if (projectToRemove == null)
         {
             return NotFound("The project was not found.");
         }
 
-        // Si el proyecto existe, lo eliminamos de la base de datos.
+        // Si encontramos el proyecto, lo eliminamos del contexto de la base de datos.
         Context.Projects.Remove(projectToRemove);
+
+        // Guardamos los cambios en la base de datos de forma asíncrona.
         await Context.SaveChangesAsync();
 
-        // Devolvemos un mensaje de confirmación.
+        // Devolvemos una respuesta con un estado 200 (OK) indicando que el proyecto fue eliminado con éxito.
         return Ok("The project was deleted.");
     }
 }

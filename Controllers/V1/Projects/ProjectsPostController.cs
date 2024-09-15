@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
 using MyBackendNemura.Dtos.Project;
@@ -19,23 +18,30 @@ public class ProjectsPostController : ControllerBase
         Context = context;
     }
 
-    // Este método va a crear un nuevo proyecto en la base de datos.
+    // Este método crea un nuevo proyecto en la base de datos.
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] ProjectPostDto projectPostDto)
     {
+        // Verificamos si el modelo recibido es válido. Si no es válido, devolvemos un código 400 Bad Request junto con los detalles de la validación.
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
+        // Creamos una nueva instancia de 'Project' y asignamos los valores del DTO a las propiedades del modelo.
         var project = new Project
         {
-            Name = projectPostDto.Name,
-            UserId = projectPostDto.UserId
+            Name = projectPostDto.Name,   // Nombre del proyecto
+            UserId = projectPostDto.UserId // ID del usuario asociado al proyecto
         };
 
+        // Agregamos el nuevo proyecto al contexto de la base de datos.
         Context.Projects.Add(project);
+
+        // Guardamos los cambios en la base de datos de forma asíncrona.
         await Context.SaveChangesAsync();
+
+        // Devolvemos una respuesta con un estado 200 OK indicando que el proyecto ha sido creado exitosamente.
         return Ok("Project has been successfully created.");
     }
 }
