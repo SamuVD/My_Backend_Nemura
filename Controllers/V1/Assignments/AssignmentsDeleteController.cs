@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
-using MyBackendNemura.Models;
 
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
@@ -17,7 +16,23 @@ public class AssignmentsDeleteController : ControllerBase
         Context = context;
     }
 
-    // Este método se encarga de eliminar una tarea.
-    //[HttpDelete]
-    //public async Task<IActionResult> Delete(Assignment assignment){}
+    // Este método se encarga de eliminar una tarea por el Id.
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute]int id)
+    {
+        // Buscamos la tarea por su ID.
+        var assignment = await Context.Assignments.FindAsync(id);
+        
+        // Si la tarea no existe, devolvemos un mensaje de error.
+        if (assignment == null)
+        {
+            return NotFound("The assignment was not found.");
+        }
+        // Si la tarea existe, la eliminamos de la base de datos.
+        Context.Assignments.Remove(assignment);
+        await Context.SaveChangesAsync();
+        
+        // Devolvemos un mensaje de confirmación.
+        return Ok("The assignment was deleted.");
+    }
 }

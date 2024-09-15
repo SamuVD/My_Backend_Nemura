@@ -26,8 +26,12 @@
          útil para manejar configuraciones sensibles como claves o conexiones. -->
 
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
-    <!-- Paquete para manejar autenticación JWT (JSON Web Tokens) en aplicaciones ASP.NET Core,
+     <!-- Paquete para manejar autenticación JWT (JSON Web Tokens) en aplicaciones ASP.NET Core,
          utilizado para implementar seguridad en APIs. -->
+
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.8" />
+    <!-- Paquete que habilita el soporte para usar Newtonsoft.Json en lugar del serializador JSON por defecto de .NET, 
+     permitiendo funcionalidades avanzadas como la conversión de enums a strings -->
 
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <!-- Paquete que proporciona soporte para Entity Framework Core, un ORM para trabajar con bases de datos
