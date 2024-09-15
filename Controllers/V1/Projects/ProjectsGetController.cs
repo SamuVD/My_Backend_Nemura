@@ -27,12 +27,13 @@ public class ProjectsGetController : ControllerBase
         var projects = await Context.Projects
             .Select(project => new ProjectGetDto
             {
+                Id = project.Id,
                 Name = project.Name,
                 UserId = project.UserId
             }).ToListAsync();
 
         // 2. Verificamos si no hay proyectos
-        if (projects == null || projects.Count == 0)
+        if (projects == null)
         {
             return NoContent(); // Devolvemos un código 204 No Content si no hay proyectos
         }
