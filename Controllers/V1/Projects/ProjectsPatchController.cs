@@ -6,20 +6,20 @@ namespace MyBackendNemura.Controllers.V1.Projects;
 
 [ApiController]
 [Route("api/v1/projects")]
-public class ProjectsUpdateController : ControllerBase
+public class ProjectsPatchController : ControllerBase
 {
     // Esta propiedad es nuestra llave para entrar a la base de datos.
     private readonly ApplicationDbContext Context;
 
     // Builder. Este constructor se va a encargar de hacerme la conexión con la base de datos con ayuda de la llave.
-    public ProjectsUpdateController(ApplicationDbContext context)
+    public ProjectsPatchController(ApplicationDbContext context)
     {
         Context = context;
     }
 
     // Este método se encargará de actualizar el nombre de un proyecto.
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProjectPatchDto projectPatchDto)
+    public async Task<IActionResult> Patch([FromRoute] int id, ProjectPatchDto projectPatchDto)
     {
         // Buscamos el proyecto por su ID.
         var project = await Context.Projects.FindAsync(id);

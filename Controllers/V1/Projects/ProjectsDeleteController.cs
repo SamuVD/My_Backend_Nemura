@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
-using MyBackendNemura.Dtos.Project;
 
 namespace MyBackendNemura.Controllers.V1.Projects;
 
@@ -18,11 +17,11 @@ public class ProjectsDeleteController : ControllerBase
     }
 
     // Este método va a ser llamado cuando se quiera borrar un proyecto por el Id.
-    [HttpDelete]
-    public async Task<IActionResult> Delete(ProjectDeleteDto projectDeleteDto)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
         // Primero, buscamos el proyecto en la base de datos.
-        var projectToRemove = await Context.Projects.FindAsync(projectDeleteDto.Id);
+        var projectToRemove = await Context.Projects.FindAsync(id);
 
         // Si el proyecto no existe, devolvemos un mensaje de error.
         if (projectToRemove == null)
