@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
 
-namespace NemuraProject.Controllers.V1.Assignments;
+namespace MyBackendNemura.Controllers.V1.Assignments;
 
 [ApiController]
 [Route("api/[controller]")]

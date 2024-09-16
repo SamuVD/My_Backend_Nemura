@@ -1,4 +1,5 @@
-// Importamos las librerías necesarias para trabajar con controladores, Data Base, DTOs, y enums.
+// Importamos las librerías necesarias para trabajar con Autorizaciones, controladores, Data Base, DTOs, y enums.
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
 using MyBackendNemura.Dtos.Assignment;
@@ -7,6 +8,7 @@ using MyBackendNemura.Enums;
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
 // Definimos el controlador para manejar las solicitudes relacionadas con la actualización de tareas.
+[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/v1/assignments")]
 public class AssignmentsPutController : ControllerBase
