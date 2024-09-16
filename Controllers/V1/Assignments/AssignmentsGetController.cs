@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
 // Definimos el controlador para manejar las solicitudes relacionadas con la obtención de tareas.
-[Authorize] // Atributo para proteger el Endpoint
+//[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/v1/assignments")]
 public class AssignmentsGetController : ControllerBase
@@ -51,7 +51,7 @@ public class AssignmentsGetController : ControllerBase
     }
 
     // Método para manejar solicitudes HTTP GET. Este método devuelve una tarea específica usando su ID.
-    [HttpGet("GetById/{id}")]
+    [HttpGet("ById/{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
         // Buscamos la tarea en la base de datos por su ID. Si no la encontramos, 'assignmentFound' será null.
@@ -81,7 +81,7 @@ public class AssignmentsGetController : ControllerBase
     }
 
     // Método para manejar solicitudes HTTP GET. Este método devuelve todas las tareas asociadas a un proyecto específico usando el ID del proyecto.
-    [HttpGet("GetByProjectId/{id}")]
+    [HttpGet("ByProjectId/{id}")]
     public async Task<IActionResult> GetAssignmentsByProjectId(int id)
     {
         // Consultamos la base de datos para obtener todas las tareas asociadas al proyecto con el ID proporcionado.

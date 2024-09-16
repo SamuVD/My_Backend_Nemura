@@ -4,7 +4,7 @@ using MyBackendNemura.DataBase;
 
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
-[Authorize] // Atributo para proteger el Endpoint
+//[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/[controller]")]
 public class AssignmentsDeleteController : ControllerBase

@@ -8,7 +8,7 @@ using MyBackendNemura.Dtos.Project;
 namespace MyBackendNemura.Controllers.V1.Projects;
 
 // Definimos el controlador para manejar las solicitudes relacionadas con la obtención de proyectos.
-[Authorize] // Atributo para proteger el Endpoint
+//[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/v1/projects")]
 public class ProjectsGetController : ControllerBase
@@ -45,5 +45,30 @@ public class ProjectsGetController : ControllerBase
 
         // 3. Si encontramos proyectos, devolvemos la lista con un código 200 OK.
         return Ok(projects); // Devolvemos los proyectos.
+    }
+
+    // Método para traer todos los proyectos que tiene un usuario por el UserId.
+    [HttpGet("ByUserId/{id}")]
+    public async Task<IActionResult> GetAllProjectsByUserId(int id)
+    {
+        // Consultamos la base de datos para obtener todos los proyectos asociados al usuario con el ID proporcionado.
+        var projects = await Context.Projects
+                                       .Where(project => project.UserId == id)
+                                       .Select(project => new
+                                       {
+                                           project.Id,                    // ID del proyecto
+                                           project.Name,                 // Nombre del proyecto
+                                           project.UserId,              // ID del usuario.
+                                       }).ToListAsync();
+
+        // Verificamos si la lista de proyectos está vacía. 
+        // Si no hay proyectos asociados al usuario, devolvemos una respuesta con un estado 404 (Not Found).
+        if (projects == null)
+        {
+            return NotFound("No projects found for the specified user.");
+        }
+
+        // Devolvemos la lista de proyectos asociados al usuario con un estado 200 OK.
+        return Ok(projects); // Proyectos encontrados para el usuario.
     }
 }
