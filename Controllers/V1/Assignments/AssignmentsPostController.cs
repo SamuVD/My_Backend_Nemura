@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
 using MyBackendNemura.Dtos.Assignment;
@@ -6,6 +7,7 @@ using MyBackendNemura.Enums;
 
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
+[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/v1/assignments")]
 public class AssignmentsPostController : ControllerBase

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
 using MyBackendNemura.Dtos.Project;
@@ -5,6 +6,7 @@ using MyBackendNemura.Models;
 
 namespace MyBackendNemura.Controllers.V1.Projects;
 
+[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/v1/projects")]
 public class ProjectsPostController : ControllerBase

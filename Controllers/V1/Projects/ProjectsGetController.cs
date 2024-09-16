@@ -1,4 +1,5 @@
-// Importamos las librerías necesarias para trabajar con controladores, Entity Framework, la Data Base y los DTOs.
+// Importamos las librerías necesarias para trabajar con Autorizaciones, controladores, Entity Framework, la Data Base, y los DTOs.
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyBackendNemura.DataBase;
@@ -7,6 +8,7 @@ using MyBackendNemura.Dtos.Project;
 namespace MyBackendNemura.Controllers.V1.Projects;
 
 // Definimos el controlador para manejar las solicitudes relacionadas con la obtención de proyectos.
+[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/v1/projects")]
 public class ProjectsGetController : ControllerBase

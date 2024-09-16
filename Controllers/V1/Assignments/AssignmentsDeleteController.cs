@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
 
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
+[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/[controller]")]
 public class AssignmentsDeleteController : ControllerBase
