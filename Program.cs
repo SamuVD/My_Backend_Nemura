@@ -59,7 +59,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,  // Valida que la audiencia del token sea correcta.
         ValidateLifetime = true,  // Valida que el token no esté expirado.
         ValidateIssuerSigningKey = true,  // Valida que la clave usada para firmar el token sea válida.
-        ValidIssuer = jwtIssuer,  // Define el emisor válido.
+        ValidIssuer = jwtIssuer,   // Define el emisor válido.
         ValidAudience = jwtAudience,  // Define la audiencia válida.
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))  // Define la clave de firma del token.
     };

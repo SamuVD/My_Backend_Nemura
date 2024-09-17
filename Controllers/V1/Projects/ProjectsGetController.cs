@@ -8,7 +8,7 @@ using MyBackendNemura.Dtos.Project;
 namespace MyBackendNemura.Controllers.V1.Projects;
 
 // Definimos el controlador para manejar las solicitudes relacionadas con la obtención de proyectos.
-//[Authorize] // Atributo para proteger el Endpoint
+[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/v1/projects")]
 public class ProjectsGetController : ControllerBase

@@ -8,7 +8,7 @@ using MyBackendNemura.Enums;
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
 // Definimos el controlador para manejar las solicitudes relacionadas con la actualización de tareas.
-//[Authorize] // Atributo para proteger el Endpoint
+[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/v1/assignments")]
 public class AssignmentsPutController : ControllerBase

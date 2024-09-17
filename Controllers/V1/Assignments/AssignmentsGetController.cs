@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
 // Definimos el controlador para manejar las solicitudes relacionadas con la obtención de tareas.
-//[Authorize] // Atributo para proteger el Endpoint
+[Authorize] // Atributo para proteger el Endpoint
 [ApiController]
 [Route("api/v1/assignments")]
 public class AssignmentsGetController : ControllerBase
