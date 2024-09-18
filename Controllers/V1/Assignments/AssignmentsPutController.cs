@@ -39,24 +39,24 @@ public class AssignmentsPutController : ControllerBase
         // Convertir el valor de Status a Enum
         // Intentamos convertir la cadena recibida en el DTO a un valor del enum AssignmentStatus.
         // Si la conversión falla, devolvemos un error con código 400 Bad Request y un mensaje de valor de estado inválido.
-        if (!Enum.TryParse(assignmentPutDto.Status, true, out AssignmentStatus status))
-        {
-            return BadRequest("Invalid status value.");
-        }
+        // if (!Enum.TryParse(assignmentPutDto.Status, true, out AssignmentStatus status))
+        // {
+        //     return BadRequest("Invalid status value.");
+        // }
 
         // Convertir el valor de Priority a Enum
         // Intentamos convertir la cadena recibida en el DTO a un valor del enum AssignmentPriority.
         // Si la conversión falla, devolvemos un error con código 400 Bad Request y un mensaje de valor de prioridad inválido.
-        if (!Enum.TryParse(assignmentPutDto.Priority, true, out AssignmentPriority priority))
-        {
-            return BadRequest("Invalid priority value.");
-        }
+        // if (!Enum.TryParse(assignmentPutDto.Priority, true, out AssignmentPriority priority))
+        // {
+        //     return BadRequest("Invalid priority value.");
+        // }
 
         // Actualizamos las propiedades de la tarea encontrada con los valores proporcionados en el DTO.
         assignmentFound.Name = assignmentPutDto.Name;
         assignmentFound.Description = assignmentPutDto.Description;
-        assignmentFound.Status = status;       // Asignamos el valor convertido del estado
-        assignmentFound.Priority = priority;   // Asignamos el valor convertido de la prioridad
+        assignmentFound.Status = assignmentPutDto.Status;       // Asignamos el valor convertido del estado
+        assignmentFound.Priority = assignmentPutDto.Priority;   // Asignamos el valor convertido de la prioridad
 
         // Guardamos los cambios en la base de datos de forma asíncrona.
         await Context.SaveChangesAsync();
