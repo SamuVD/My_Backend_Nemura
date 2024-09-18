@@ -6,21 +6,21 @@ using MyBackendNemura.Models;
 
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
-[Authorize] // Atributo para proteger el Endpoint
+[Authorize] // Attribute to protect the Endpoint
 [ApiController]
 [Route("api/v1/assignments")]
 public class AssignmentsPostController : ControllerBase
 {
-    // Esta propiedad es nuestra llave para entrar a la base de datos.
+    // This property is our key to access the database.
     private readonly ApplicationDbContext Context;
 
-    // Builder. Este constructor se va a encargar de hacerme la conexión con la base de datos con ayuda de la llave.
+    // Builder. This constructor is responsible for connecting to the database with the help of the key.
     public AssignmentsPostController(ApplicationDbContext context)
     {
         Context = context;
     }
 
-    // Este método se encargará de crear una nueva tarea.
+    // This method is responsible for creating a new task.
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] AssignmentPostDto assignmentPostDto)
     {
@@ -28,46 +28,46 @@ public class AssignmentsPostController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        // Convertir el valor de Status a Enum
-        // Intenta convertir la cadena recibida en el DTO a un valor del enum AssignmentStatus.
-        // Si la conversión falla, devuelve un error 400 con un mensaje de valor de estado inválido.
+        // Convert the Status value to Enum
+        // Attempt to convert the string received in the DTO to an AssignmentStatus enum value.
+        // If conversion fails, return a 400 Bad Request error with an invalid status value message.
         // if (!Enum.TryParse(assignmentPostDto.Status, true, out AssignmentStatus status))
         // {
         //     return BadRequest("Invalid status value.");
         // }
 
-        // Convertir el valor de Priority a Enum
-        // Intenta convertir la cadena recibida en el DTO a un valor del enum AssignmentPriority.
-        // Si la conversión falla, devuelve un error 400 con un mensaje de valor de prioridad inválido.
+        // Convert the Priority value to Enum
+        // Attempt to convert the string received in the DTO to an AssignmentPriority enum value.
+        // If conversion fails, return a 400 Bad Request error with an invalid priority value message.
         // if (!Enum.TryParse(assignmentPostDto.Priority, true, out AssignmentPriority priority))
         // {
         //     return BadRequest("Invalid priority value.");
         // }
 
-        // Busca el proyecto en la base de datos usando el ID recibido en el DTO.
-        // Si no se encuentra el proyecto, devuelve un error 404 con un mensaje de proyecto no encontrado.
+        // Search for the project in the database using the ID received in the DTO.
+        // If the project is not found, return a 404 error with a project not found message.
         var project = await Context.Projects.FindAsync(assignmentPostDto.ProjectId);
         if (project == null)
         {
             return NotFound("Project not found");
         }
 
-        // Crea una nueva instancia de Assignment usando los valores del DTO y los enums convertidos.
+        // Create a new instance of Assignment using the values from the DTO and converted enums.
         var assignment = new Assignment
         {
             Name = assignmentPostDto.Name,
             Description = assignmentPostDto.Description,
-            Status = assignmentPostDto.Status, // Aquí el enum ya está siendo manejado
-            Priority = assignmentPostDto.Priority, // Al igual que el de prioridad
+            Status = assignmentPostDto.Status, // Here the enum is already being handled
+            Priority = assignmentPostDto.Priority, // Likewise for priority
             ProjectId = assignmentPostDto.ProjectId,
             Project = project
         };
 
-        // Agrega la nueva tarea al contexto y guarda los cambios en la base de datos.
+        // Add the new task to the context and save the changes to the database.
         Context.Assignments.Add(assignment);
         await Context.SaveChangesAsync();
 
-        // Devuelve un mensaje de éxito con estado 200 OK.
+        // Return a success message with a 200 OK status.
         return Ok("Assignment has been created successfully.");
     }
 }

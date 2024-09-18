@@ -1,4 +1,4 @@
-// Importamos las librerías necesarias para trabajar con Autorizaciones, controladores, Entity Framework y los DTOs.
+// Import the necessary libraries for working with Authorizations, controllers, Entity Framework, and DTOs.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
@@ -7,104 +7,104 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
-// Definimos el controlador para manejar las solicitudes relacionadas con la obtención de tareas.
-[Authorize] // Atributo para proteger el Endpoint
+// Define the controller to handle requests related to fetching tasks.
+[Authorize] // Attribute to protect the Endpoint
 [ApiController]
 [Route("api/v1/assignments")]
 public class AssignmentsGetController : ControllerBase
 {
-    // Esta propiedad se utiliza para interactuar con la base de datos.
+    // This property is used to interact with the database.
     private readonly ApplicationDbContext Context;
 
-    // Constructor del controlador, donde inyectamos la instancia del contexto de la base de datos.
-    // El contexto permite realizar operaciones sobre la base de datos.
+    // Constructor of the controller, where we inject the database context instance.
+    // The context allows performing operations on the database.
     public AssignmentsGetController(ApplicationDbContext context)
     {
         Context = context;
     }
 
-    // Método para manejar solicitudes HTTP GET. Este método devuelve todas las tareas junto con el ID del proyecto al que pertenecen.
+    // Method to handle HTTP GET requests. This method returns all tasks along with the ID of the project they belong to.
     [HttpGet]
     public async Task<ActionResult<List<AssignmentGetDto>>> Get()
     {
-        // Consulta para obtener todas las tareas desde la base de datos y proyectarlas en el DTO.
+        // Query to retrieve all tasks from the database and project them into the DTO.
         var assignments = await Context.Assignments.Select(
             assignment => new AssignmentGetDto
             {
-                Id = assignment.Id,                   // ID de la tarea
-                Name = assignment.Name,               // Nombre de la tarea
-                Description = assignment.Description, // Descripción de la tarea
-                Status = assignment.Status, // Estado de la tarea
-                Priority = assignment.Priority, // Prioridad de la tarea
-                ProjectId = assignment.ProjectId      // ID del proyecto asociado
+                Id = assignment.Id,                   // Task ID
+                Name = assignment.Name,               // Task name
+                Description = assignment.Description, // Task description
+                Status = assignment.Status,           // Task status
+                Priority = assignment.Priority,       // Task priority
+                ProjectId = assignment.ProjectId      // Associated project ID
             }).ToListAsync();
 
-        // Verificamos si la lista de tareas está vacía. 
-        // Si no hay tareas, devolvemos un código 204 No Content.
+        // Check if the list of tasks is empty. 
+        // If no tasks are found, return a 204 No Content.
         if (assignments == null)
         {
-            return NoContent(); // No hay tareas disponibles.
+            return NoContent(); // No tasks available.
         }
 
-        // Devolvemos la lista de tareas con un estado 200 OK.
-        return Ok(assignments); // Tareas encontradas.
+        // Return the list of tasks with a 200 OK status.
+        return Ok(assignments); // Tasks found.
     }
 
-    // Método para manejar solicitudes HTTP GET. Este método devuelve una tarea específica usando su ID.
+    // Method to handle HTTP GET requests. This method returns a specific task using its ID.
     [HttpGet("ById/{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
-        // Buscamos la tarea en la base de datos por su ID. Si no la encontramos, 'assignmentFound' será null.
+        // Search for the task in the database by its ID. If not found, 'assignmentFound' will be null.
         var assignmentFound = await Context.Assignments.FindAsync(id);
 
-        // Si no encontramos la tarea, devolvemos una respuesta con un estado 404 (Not Found).
+        // If the task is not found, return a 404 (Not Found) response.
         if (assignmentFound == null)
         {
             return NotFound("Assignment not found.");
         }
 
-        // Consultamos nuevamente para proyectar la tarea encontrada en una forma anónima.
+        // Query again to project the found task into an anonymous form.
         var assignments = await Context.Assignments.Select(
             assignment => new
             {
-                assignment.Id,                   // ID de la tarea
-                assignment.Name,                 // Nombre de la tarea
-                assignment.Description,          // Descripción de la tarea
-                assignment.Status,               // Estado de la tarea
-                assignment.Priority,             // Prioridad de la tarea
-                assignment.ProjectId             // ID del proyecto asociado
+                assignment.Id,                   // Task ID
+                assignment.Name,                 // Task name
+                assignment.Description,          // Task description
+                assignment.Status,               // Task status
+                assignment.Priority,             // Task priority
+                assignment.ProjectId             // Associated project ID
             }
         ).ToListAsync();
 
-        // Devolvemos la tarea encontrada con un estado 200 OK.
-        return Ok(assignments); // Tarea encontrada.
+        // Return the found task with a 200 OK status.
+        return Ok(assignments); // Task found.
     }
 
-    // Método para manejar solicitudes HTTP GET. Este método devuelve todas las tareas asociadas a un proyecto específico usando el ID del proyecto.
+    // Method to handle HTTP GET requests. This method returns all tasks associated with a specific project using the project ID.
     [HttpGet("ByProjectId/{id}")]
     public async Task<IActionResult> GetAssignmentsByProjectId([FromRoute] int id)
     {
-        // Consultamos la base de datos para obtener todas las tareas asociadas al proyecto con el ID proporcionado.
+        // Query the database to retrieve all tasks associated with the project with the given ID.
         var assignments = await Context.Assignments
                                        .Where(assignment => assignment.ProjectId == id)
                                        .Select(assignment => new
                                        {
-                                           assignment.Id,                   // ID de la tarea
-                                           assignment.Name,                 // Nombre de la tarea
-                                           assignment.Description,          // Descripción de la tarea
-                                           assignment.Status,               // Estado de la tarea
-                                           assignment.Priority,             // Prioridad de la tarea
-                                           assignment.ProjectId             // ID del proyecto asociado
+                                           assignment.Id,                   // Task ID
+                                           assignment.Name,                 // Task name
+                                           assignment.Description,          // Task description
+                                           assignment.Status,               // Task status
+                                           assignment.Priority,             // Task priority
+                                           assignment.ProjectId             // Associated project ID
                                        }).ToListAsync();
 
-        // Verificamos si la lista de tareas está vacía. 
-        // Si no hay tareas asociadas al proyecto, devolvemos una respuesta con un estado 404 (Not Found).
+        // Check if the list of tasks is empty. 
+        // If no tasks are found for the project, return a 404 (Not Found) response.
         if (assignments == null)
         {
             return NotFound("No tasks found for the specified project.");
         }
 
-        // Devolvemos la lista de tareas asociadas al proyecto con un estado 200 OK.
-        return Ok(assignments); // Tareas encontradas para el proyecto.
+        // Return the list of tasks associated with the project with a 200 OK status.
+        return Ok(assignments); // Tasks found for the project.
     }
 }

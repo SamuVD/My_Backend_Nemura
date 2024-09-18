@@ -15,17 +15,17 @@ namespace MyBackendNemura.Controllers.Auth;
 [Route("api/v1/users")]
 public class AuthsPostController : ControllerBase
 {
-    // Propiedad para acceder al contexto de la base de datos.
+    // Property to access the database context.
     private readonly ApplicationDbContext Context;
 
-    // Propiedad para acceder a la configuración de la aplicación.
+    // Property to access the application configuration.
     private readonly IConfiguration _configuration;
 
-    // Propiedad para manejar el hashing de contraseñas.
+    // Property to handle password hashing.
     private readonly PasswordHasher<User> _passwordHasher;
 
-    // Constructor del controlador.
-    // Inicializa el contexto de la base de datos, la configuración y el passwordHasher.
+    // Constructor of the controller.
+    // Initializes the database context, configuration, and passwordHasher.
     public AuthsPostController(ApplicationDbContext context, IConfiguration configuration)
     {
         Context = context;
@@ -33,35 +33,35 @@ public class AuthsPostController : ControllerBase
         _passwordHasher = new PasswordHasher<User>();
     }
 
-    // Método para iniciar sesión de un usuario.
-    // Utiliza el atributo [HttpPost("Login")] para definir la ruta del endpoint.
+    // Method to log in a user.
+    // Uses the [HttpPost("Login")] attribute to define the endpoint route.
     [HttpPost("Login")]
     public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
     {
-        // Verifica si el modelo del DTO es válido.
+        // Check if the DTO model is valid.
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        // Busca al usuario en la base de datos por su NickName.
+        // Find the user in the database by their NickName.
         var user = await Context.Users.FirstOrDefaultAsync(item => item.NickName == userLoginDto.NickName);
         if (user == null)
         {
             return Unauthorized("Invalid credentials.");
         }
 
-        // Verifica si la contraseña proporcionada coincide con la contraseña hasheada en la base de datos.
+        // Verify if the provided password matches the hashed password stored in the database.
         var passwordResult = _passwordHasher.VerifyHashedPassword(user, user.Password, userLoginDto.Password);
         if (passwordResult == PasswordVerificationResult.Failed)
         {
             return Unauthorized("Invalid credentials.");
         }
 
-        // Si la autenticación es exitosa, genera un token JWT para el usuario.
+        // If authentication is successful, generate a JWT token for the user.
         var token = GenerateJwtToken(user);
 
-        // Devuelve una respuesta OK con los datos del usuario y el token JWT.
+        // Return an OK response with the user data and JWT token.
         return Ok(new
         {
             message = "Success",
@@ -77,35 +77,35 @@ public class AuthsPostController : ControllerBase
         });
     }
 
-    // Método privado para generar el JWT.
+    // Private method to generate the JWT.
     private string GenerateJwtToken(User user)
     {
-        // Crea una clave de seguridad usando la clave secreta de la configuración.
+        // Create a security key using the secret key from the configuration.
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]));
 
-        // Crea las credenciales de firma usando la clave de seguridad y el algoritmo HMAC-SHA256.
+        // Create signing credentials using the security key and HMAC-SHA256 algorithm.
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        // Define los claims que se incluirán en el token JWT.
+        // Define the claims that will be included in the JWT.
         var claims = new[]
         {
-            new Claim("Id", user.Id.ToString()), // Id del usuario.
-            new Claim("Name", user.Name), // Nombre del usuario.
-            new Claim("LastName", user.LastName), // Apellido del usuario.
-            new Claim("NickName", user.NickName), // Apodo del usuario.
-            new Claim("Email", user.Email) // Email del usuario.
+            new Claim("Id", user.Id.ToString()), // User Id.
+            new Claim("Name", user.Name), // User name.
+            new Claim("LastName", user.LastName), // User last name.
+            new Claim("NickName", user.NickName), // User nickname.
+            new Claim("Email", user.Email) // User email.
         };
 
-        // Crea el token JWT con los parámetros configurados.
+        // Create the JWT with the configured parameters.
         var token = new JwtSecurityToken(
-            issuer: _configuration["JWT_ISSUER"], // Emisor del token.
-            audience: _configuration["JWT_AUDIENCE"], // Audiencia del token.
-            claims: claims, // Claims que se incluirán en el token.
-            expires: DateTime.Now.AddMinutes(double.Parse(_configuration["JWT_EXPIREMINUTES"])), // Tiempo de expiración del token.
-            signingCredentials: credentials // Credenciales para la firma del token.
+            issuer: _configuration["JWT_ISSUER"], // Token issuer.
+            audience: _configuration["JWT_AUDIENCE"], // Token audience.
+            claims: claims, // Claims to be included in the token.
+            expires: DateTime.Now.AddMinutes(double.Parse(_configuration["JWT_EXPIREMINUTES"])), // Token expiration time.
+            signingCredentials: credentials // Credentials for signing the token.
         );
 
-        // Devuelve el token JWT como una cadena.
+        // Return the JWT as a string.
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

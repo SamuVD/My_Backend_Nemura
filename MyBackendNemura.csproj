@@ -1,67 +1,67 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-  <!-- El SDK define el tipo de proyecto que estamos usando. 
-       En este caso, es un proyecto web de ASP.NET Core. -->
+  <!-- The SDK defines the type of project we are using.
+       In this case, it is an ASP.NET Core web project. -->
 
   <PropertyGroup>
-    <!-- Aquí se definen las propiedades del proyecto, como el marco de trabajo y configuraciones generales -->
+    <!-- Here the project properties are defined, such as the framework and general settings. -->
 
     <TargetFramework>net8.0</TargetFramework>
-    <!-- El proyecto está configurado para usar .NET 8.0 como el marco de trabajo principal. -->
+    <!-- The project is configured to use .NET 8.0 as the main framework. -->
 
     <Nullable>enable</Nullable>
-    <!-- Habilita las anotaciones y advertencias de referencia nula en todo el proyecto,
-         ayudando a detectar posibles errores con valores nulos. -->
+    <!-- Enables nullable reference annotations and warnings throughout the project,
+         helping to detect potential issues with null values. -->
 
     <ImplicitUsings>enable</ImplicitUsings>
-    <!-- Habilita la inclusión automática de espacios de nombres comunes,
-         lo que simplifica el código y evita tener que escribir los "using" más utilizados. -->
+    <!-- Enables the automatic inclusion of common namespaces,
+         simplifying the code and avoiding the need to write frequently used "using" directives. -->
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Este grupo contiene las referencias a los paquetes NuGet que el proyecto necesita. 
-         Los paquetes son bibliotecas externas que agregan funcionalidades adicionales. -->
+    <!-- This group contains references to the NuGet packages the project needs.
+         Packages are external libraries that add additional functionality. -->
 
     <PackageReference Include="DotNetEnv" Version="3.1.1" />
-    <!-- Paquete que permite cargar variables de entorno desde archivos .env,
-         útil para manejar configuraciones sensibles como claves o conexiones. -->
+    <!-- Package that allows loading environment variables from .env files,
+         useful for managing sensitive configurations like keys or connections. -->
 
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
-     <!-- Paquete para manejar autenticación JWT (JSON Web Tokens) en aplicaciones ASP.NET Core,
-         utilizado para implementar seguridad en APIs. -->
+     <!-- Package for handling JWT (JSON Web Token) authentication in ASP.NET Core applications,
+         used to implement security in APIs. -->
 
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.8" />
-    <!-- Paquete que habilita el soporte para usar Newtonsoft.Json en lugar del serializador JSON por defecto de .NET, 
-     permitiendo funcionalidades avanzadas como la conversión de enums a strings -->
+    <!-- Package that enables support for using Newtonsoft.Json instead of .NET's default JSON serializer,
+         allowing advanced features such as enum-to-string conversion. -->
 
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
-    <!-- Paquete que proporciona soporte para Entity Framework Core, un ORM para trabajar con bases de datos
-         en aplicaciones .NET. -->
+    <!-- Package that provides support for Entity Framework Core, an ORM for working with databases
+         in .NET applications. -->
 
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <!-- Paquete de diseño para Entity Framework Core, que proporciona herramientas necesarias 
-         para generar migraciones y realizar operaciones de diseño en la base de datos. -->
+    <!-- Design package for Entity Framework Core, providing necessary tools
+         for generating migrations and performing design operations on the database. -->
 
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <!-- Proporciona herramientas CLI (línea de comandos) para trabajar con Entity Framework Core,
-         permitiendo crear migraciones y actualizar bases de datos directamente desde la consola. -->
+    <!-- Provides CLI (command-line interface) tools for working with Entity Framework Core,
+         allowing you to create migrations and update databases directly from the console. -->
 
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
-    <!-- Paquete para usar Entity Framework Core con bases de datos MySQL. 
-         Pomelo es una implementación popular para trabajar con MySQL en proyectos .NET. -->
+    <!-- Package for using Entity Framework Core with MySQL databases.
+         Pomelo is a popular implementation for working with MySQL in .NET projects. -->
 
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
-    <!-- Paquete que agrega soporte para Swagger, una herramienta para generar documentación 
-         interactiva para APIs desarrolladas con ASP.NET Core. -->
+    <!-- Package that adds support for Swagger, a tool for generating interactive documentation
+         for APIs developed with ASP.NET Core. -->
 
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
-    <!-- Paquete para trabajar con tokens JWT en aplicaciones .NET, útil para manejar la autenticación
-         y autorización en aplicaciones basadas en API. -->
+    <!-- Package for working with JWT tokens in .NET applications, useful for handling authentication
+         and authorization in API-based applications. -->
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-// Importamos las librerías necesarias para trabajar con Autorizaciones, controladores, Entity Framework, la Data Base, y los DTOs.
+// Import necessary libraries for working with authorizations, controllers, Entity Framework, database access, and DTOs.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,68 +7,68 @@ using MyBackendNemura.Dtos.Project;
 
 namespace MyBackendNemura.Controllers.V1.Projects;
 
-// Definimos el controlador para manejar las solicitudes relacionadas con la obtención de proyectos.
-[Authorize] // Atributo para proteger el Endpoint
+// Define the controller to handle requests related to obtaining projects.
+[Authorize] // Attribute to protect the endpoint
 [ApiController]
 [Route("api/v1/projects")]
 public class ProjectsGetController : ControllerBase
 {
-    // Esta propiedad se utiliza para interactuar con la base de datos.
+    // This property is used to interact with the database.
     private readonly ApplicationDbContext Context;
 
-    // Constructor del controlador, donde inyectamos el contexto de la base de datos.
-    // El contexto permite realizar operaciones sobre la base de datos.
+    // Constructor of the controller, where we inject the database context.
+    // The context allows performing operations on the database.
     public ProjectsGetController(ApplicationDbContext context)
     {
         Context = context;
     }
 
-    // Método para manejar solicitudes HTTP GET. Este método devuelve todos los proyectos junto con su UserId.
+    // Method to handle HTTP GET requests. This method returns all projects along with their UserId.
     [HttpGet]
     public async Task<ActionResult<List<ProjectGetDto>>> Get()
     {
-        // 1. Consulta a la base de datos para obtener todos los proyectos, seleccionando solo los campos relevantes.
+        // 1. Query the database to get all projects, selecting only the relevant fields.
         var projects = await Context.Projects
             .Select(project => new ProjectGetDto
             {
-                Id = project.Id,       // ID del proyecto
-                Name = project.Name,   // Nombre del proyecto
-                UserId = project.UserId // ID del usuario relacionado con el proyecto
+                Id = project.Id,       // Project ID
+                Name = project.Name,   // Project name
+                UserId = project.UserId // ID of the user related to the project
             }).ToListAsync();
 
-        // 2. Verificamos si la lista de proyectos está vacía (null). 
-        // Si no hay proyectos, devolvemos un código 204 No Content.
+        // 2. Check if the list of projects is empty (null).
+        // If there are no projects, return a 204 No Content status.
         if (projects == null)
         {
-            return NoContent(); // No hay proyectos disponibles.
+            return NoContent(); // No projects available.
         }
 
-        // 3. Si encontramos proyectos, devolvemos la lista con un código 200 OK.
-        return Ok(projects); // Devolvemos los proyectos.
+        // 3. If projects are found, return the list with a 200 OK status.
+        return Ok(projects); // Return the projects.
     }
 
-    // Método para traer todos los proyectos que tiene un usuario por el UserId.
+    // Method to fetch all projects associated with a user by UserId.
     [HttpGet("ByUserId/{id}")]
     public async Task<IActionResult> GetAllProjectsByUserId(int id)
     {
-        // Consultamos la base de datos para obtener todos los proyectos asociados al usuario con el ID proporcionado.
+        // Query the database to get all projects associated with the user with the provided ID.
         var projects = await Context.Projects
                                        .Where(project => project.UserId == id)
                                        .Select(project => new
                                        {
-                                           project.Id,                    // ID del proyecto
-                                           project.Name,                 // Nombre del proyecto
-                                           project.UserId,              // ID del usuario.
+                                           project.Id,                    // Project ID
+                                           project.Name,                 // Project name
+                                           project.UserId,              // User ID.
                                        }).ToListAsync();
 
-        // Verificamos si la lista de proyectos está vacía. 
-        // Si no hay proyectos asociados al usuario, devolvemos una respuesta con un estado 404 (Not Found).
+        // Check if the list of projects is empty.
+        // If there are no projects associated with the user, return a 404 (Not Found) response.
         if (projects == null)
         {
             return NotFound("No projects found for the specified user.");
         }
 
-        // Devolvemos la lista de proyectos asociados al usuario con un estado 200 OK.
-        return Ok(projects); // Proyectos encontrados para el usuario.
+        // Return the list of projects associated with the user with a 200 OK status.
+        return Ok(projects); // Projects found for the user.
     }
 }

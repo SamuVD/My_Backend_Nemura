@@ -4,37 +4,37 @@ using MyBackendNemura.DataBase;
 
 namespace MyBackendNemura.Controllers.V1.Assignments;
 
-[Authorize] // Atributo para proteger el Endpoint
+[Authorize] // Attribute to protect the Endpoint
 [ApiController]
 [Route("api/[controller]")]
 public class AssignmentsDeleteController : ControllerBase
 {
-    // Esta propiedad es nuestra llave para entrar a la base de datos.
+    // This property is our key to access the database.
     private readonly ApplicationDbContext Context;
 
-    // Builder. Este constructor se va a encargar de hacerme la conexión con la base de datos con ayuda de la llave.
+    // Constructor. This constructor is responsible for connecting to the database with the help of the key.
     public AssignmentsDeleteController(ApplicationDbContext context)
     {
         Context = context;
     }
 
-    // Este método se encarga de eliminar una tarea por el Id.
+    // Method to handle deleting a task by its Id.
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute]int id)
     {
-        // Buscamos la tarea por su ID.
+        // Search for the task by its ID.
         var assignment = await Context.Assignments.FindAsync(id);
         
-        // Si la tarea no existe, devolvemos un mensaje de error.
+        // If the task does not exist, return an error message.
         if (assignment == null)
         {
             return NotFound("The assignment was not found.");
         }
-        // Si la tarea existe, la eliminamos de la base de datos.
+        // If the task exists, remove it from the database.
         Context.Assignments.Remove(assignment);
         await Context.SaveChangesAsync();
         
-        // Devolvemos un mensaje de confirmación.
+        // Return a confirmation message.
         return Ok("The assignment was deleted.");
     }
 }

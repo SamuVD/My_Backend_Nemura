@@ -7,10 +7,10 @@ namespace MyBackendNemura.Controllers.V1.Users;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    // Esta propiedad es nuestra llave para entrar a la base de datos.
+    // This property is our key to access the database.
     private readonly ApplicationDbContext Context;
 
-    // Builder. Este constructor se va a encargar de hacerme la conexión con la base de datos con ayuda de la llave.
+    // Builder. This constructor will handle connecting to the database with the help of the key.
     public UsersController(ApplicationDbContext context)
     {
         Context = context;

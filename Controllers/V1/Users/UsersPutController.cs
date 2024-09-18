@@ -10,39 +10,37 @@ namespace MyBackendNemura.Controllers.V1.Users;
 [Route("api/v1/users")]
 public class UsersPutController : ControllerBase
 {
-    // Esta propiedad se utiliza para interactuar con la base de datos.
+    // This property is used to interact with the database.
     private readonly ApplicationDbContext Context;
 
-    // Constructor del controlador, donde inyectamos la instancia del contexto de la base de datos.
-    // El contexto es necesario para realizar operaciones CRUD sobre la base de datos.
+    // Controller constructor where we inject the database context instance.
+    // The context is necessary to perform CRUD operations on the database.
     public UsersPutController(ApplicationDbContext context)
     {
         Context = context;
     }
 
-    // Método para actualizar la información del usuario.
+    // Method to update user information.
     [HttpPut("{id}")]
     public async Task<IActionResult> Put([FromRoute] int id, UserPutDto userPutDto)
     {
-        // Buscar el usuario en la base de datos utilizando su ID.
+        // Search the user in the database using their ID.
         var userFound = await Context.Users.FindAsync(id);
 
-        // Si no se encuentra el usuario, devolver un error 404 (no encontrado).
+        // If the user is not found, return a 404 error (not found).
         if (userFound == null)
         {
             return NotFound("User not found.");
         }
 
-        // Actualizar las propiedades del usuario con los nuevos valores proporcionados en el DTO.
+        // Update user properties with the new values provided in the DTO.
         userFound.Name = userPutDto.Name;
         userFound.LastName = userPutDto.LastName;
         userFound.NickName = userPutDto.NickName;
         userFound.Email = userPutDto.Email;
 
-        // Guardar los cambios en la base de datos.
-        await Context.SaveChangesAsync();
-
-        // Devolver una respuesta de éxito.
-        return Ok("Info has been updated succesfully.");
+       await Context.SaveChangesAsync();
+       return Ok("Info has been updated successfully.");
     }
 }
+
