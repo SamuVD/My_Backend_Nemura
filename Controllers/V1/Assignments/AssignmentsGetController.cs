@@ -34,8 +34,8 @@ public class AssignmentsGetController : ControllerBase
                 Id = assignment.Id,                   // ID de la tarea
                 Name = assignment.Name,               // Nombre de la tarea
                 Description = assignment.Description, // Descripción de la tarea
-                Status = assignment.Status.ToString(), // Estado de la tarea
-                Priority = assignment.Priority.ToString(), // Prioridad de la tarea
+                Status = assignment.Status, // Estado de la tarea
+                Priority = assignment.Priority, // Prioridad de la tarea
                 ProjectId = assignment.ProjectId      // ID del proyecto asociado
             }).ToListAsync();
 

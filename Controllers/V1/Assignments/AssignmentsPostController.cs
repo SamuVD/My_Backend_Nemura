@@ -25,21 +25,25 @@ public class AssignmentsPostController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] AssignmentPostDto assignmentPostDto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         // Convertir el valor de Status a Enum
         // Intenta convertir la cadena recibida en el DTO a un valor del enum AssignmentStatus.
         // Si la conversión falla, devuelve un error 400 con un mensaje de valor de estado inválido.
-        if (!Enum.TryParse(assignmentPostDto.Status, true, out AssignmentStatus status))
-        {
-            return BadRequest("Invalid status value.");
-        }
+        // if (!Enum.TryParse(assignmentPostDto.Status, true, out AssignmentStatus status))
+        // {
+        //     return BadRequest("Invalid status value.");
+        // }
 
         // Convertir el valor de Priority a Enum
         // Intenta convertir la cadena recibida en el DTO a un valor del enum AssignmentPriority.
         // Si la conversión falla, devuelve un error 400 con un mensaje de valor de prioridad inválido.
-        if (!Enum.TryParse(assignmentPostDto.Priority, true, out AssignmentPriority priority))
-        {
-            return BadRequest("Invalid priority value.");
-        }
+        // if (!Enum.TryParse(assignmentPostDto.Priority, true, out AssignmentPriority priority))
+        // {
+        //     return BadRequest("Invalid priority value.");
+        // }
 
         // Busca el proyecto en la base de datos usando el ID recibido en el DTO.
         // Si no se encuentra el proyecto, devuelve un error 404 con un mensaje de proyecto no encontrado.
@@ -54,8 +58,8 @@ public class AssignmentsPostController : ControllerBase
         {
             Name = assignmentPostDto.Name,
             Description = assignmentPostDto.Description,
-            Status = status, // Aquí el enum ya está siendo manejado
-            Priority = priority, // Al igual que el de prioridad
+            Status = assignmentPostDto.Status, // Aquí el enum ya está siendo manejado
+            Priority = assignmentPostDto.Priority, // Al igual que el de prioridad
             ProjectId = assignmentPostDto.ProjectId,
             Project = project
         };
