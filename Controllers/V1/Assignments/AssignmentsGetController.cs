@@ -82,7 +82,7 @@ public class AssignmentsGetController : ControllerBase
 
     // Método para manejar solicitudes HTTP GET. Este método devuelve todas las tareas asociadas a un proyecto específico usando el ID del proyecto.
     [HttpGet("ByProjectId/{id}")]
-    public async Task<IActionResult> GetAssignmentsByProjectId(int id)
+    public async Task<IActionResult> GetAssignmentsByProjectId([FromRoute] int id)
     {
         // Consultamos la base de datos para obtener todas las tareas asociadas al proyecto con el ID proporcionado.
         var assignments = await Context.Assignments

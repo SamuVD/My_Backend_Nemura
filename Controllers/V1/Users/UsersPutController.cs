@@ -24,19 +24,25 @@ public class UsersPutController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Put([FromRoute] int id, UserPutDto userPutDto)
     {
+        // Buscar el usuario en la base de datos utilizando su ID.
         var userFound = await Context.Users.FindAsync(id);
 
+        // Si no se encuentra el usuario, devolver un error 404 (no encontrado).
         if (userFound == null)
         {
             return NotFound("User not found.");
         }
 
-       userFound.Name = userPutDto.Name;
-       userFound.LastName = userPutDto.LastName;
-       userFound.NickName = userPutDto.NickName;
-       userFound.Email = userPutDto.Email;
+        // Actualizar las propiedades del usuario con los nuevos valores proporcionados en el DTO.
+        userFound.Name = userPutDto.Name;
+        userFound.LastName = userPutDto.LastName;
+        userFound.NickName = userPutDto.NickName;
+        userFound.Email = userPutDto.Email;
 
-       await Context.SaveChangesAsync();
-       return Ok("Info has been updated succesfully.");
+        // Guardar los cambios en la base de datos.
+        await Context.SaveChangesAsync();
+
+        // Devolver una respuesta de éxito.
+        return Ok("Info has been updated succesfully.");
     }
 }
