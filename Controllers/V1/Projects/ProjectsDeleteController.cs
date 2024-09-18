@@ -1,46 +1,46 @@
-// Importamos las librerías necesarias para trabajar con Autorizaciones, controladores y el acceso a la base de datos.
+// Import the necessary libraries for working with Authorization, controllers, and database access.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
 
 namespace MyBackendNemura.Controllers.V1.Projects;
 
-// Definimos el controlador para manejar las solicitudes relacionadas con la eliminación de proyectos.
-[Authorize] // Atributo para proteger el Endpoint
+// Define the controller to handle requests related to project deletion.
+[Authorize] // Attribute to protect the Endpoint
 [ApiController]
 [Route("api/v1/projects")]
 public class ProjectsDeleteController : ControllerBase
 {
-    // Esta propiedad se utiliza para interactuar con la base de datos.
+    // This property is used to interact with the database.
     private readonly ApplicationDbContext Context;
 
-    // Constructor del controlador, donde inyectamos la instancia del contexto de la base de datos.
-    // El contexto es necesario para realizar operaciones CRUD sobre la base de datos.
+    // Controller constructor where we inject the database context instance.
+    // The context is needed to perform CRUD operations on the database.
     public ProjectsDeleteController(ApplicationDbContext context)
     {
         Context = context;
     }
 
-    // Método para manejar solicitudes HTTP DELETE. Este método elimina un proyecto específico usando su ID.
+    // Method to handle HTTP DELETE requests. This method deletes a specific project using its ID.
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        // Buscamos el proyecto en la base de datos por su ID. Si no lo encontramos, 'projectToRemove' será null.
+        // Search for the project in the database by its ID. If not found, 'projectToRemove' will be null.
         var projectToRemove = await Context.Projects.FindAsync(id);
 
-        // Si no encontramos el proyecto, devolvemos una respuesta con un estado 404 (Not Found).
+        // If the project is not found, return a 404 (Not Found) response.
         if (projectToRemove == null)
         {
             return NotFound("The project was not found.");
         }
 
-        // Si encontramos el proyecto, lo eliminamos del contexto de la base de datos.
+        // If the project is found, remove it from the database context.
         Context.Projects.Remove(projectToRemove);
 
-        // Guardamos los cambios en la base de datos de forma asíncrona.
+        // Save the changes to the database asynchronously.
         await Context.SaveChangesAsync();
 
-        // Devolvemos una respuesta con un estado 200 (OK) indicando que el proyecto fue eliminado con éxito.
+        // Return a 200 (OK) response indicating that the project was successfully deleted.
         return Ok("The project was deleted.");
     }
 }

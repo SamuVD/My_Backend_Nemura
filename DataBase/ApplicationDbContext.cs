@@ -5,21 +5,21 @@ namespace MyBackendNemura.DataBase;
 
 public class ApplicationDbContext : DbContext
 {
-    // Propiedades del ApplicationDbContext para hacer referencia a nuestras clases de Models.
-    // Estas propiedades permiten que las clases definidas en Models (User, Project, Assignment)
-    // se enlacen con las tablas correspondientes en la base de datos.
+    // Properties of ApplicationDbContext to reference our Model classes.
+    // These properties allow the classes defined in Models (User, Project, Assignment)
+    // to be linked to the corresponding tables in the database.
     public DbSet<User> Users { get; set; }
-    // Representa la tabla "Users" en la base de datos y está vinculada a la clase User.
+    // Represents the "Users" table in the database and is linked to the User class.
 
     public DbSet<Project> Projects { get; set; }
-    // Representa la tabla "Projects" en la base de datos y está vinculada a la clase Project.
+    // Represents the "Projects" table in the database and is linked to the Project class.
 
     public DbSet<Assignment> Assignments { get; set; }
-    // Representa la tabla "Assignments" en la base de datos y está vinculada a la clase Assignment.
+    // Represents the "Assignments" table in the database and is linked to the Assignment class.
 
-    // Constructor del ApplicationDbContext.
-    // Recibe las opciones (DbContextOptions) necesarias para configurar el contexto de la base de datos.
-    // Llama al constructor de la clase base DbContext para inicializar el contexto.
+    // Constructor of ApplicationDbContext.
+    // Receives the options (DbContextOptions) needed to configure the database context.
+    // Calls the base class DbContext constructor to initialize the context.
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }

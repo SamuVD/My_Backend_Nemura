@@ -3,34 +3,34 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyBackendNemura.Models;
 
-// LAS PROPIEDADES DE ESTA CLASE SERÁN VALIDADAS UTILIZANDO DATA ANNOTATIONS.
+// THE PROPERTIES OF THIS CLASS WILL BE VALIDATED USING DATA ANNOTATIONS.
 
-// Data Annotation para cambiar el nombre de la entidad en la base de datos.
+// Data annotation to change the name of the entity in the database.
 [Table("projects")]
 public class Project
 {
-    // Data Annotation para hacer la referencia de que esta propiedad será la primary key en la entidad assignments de la base de datos.
+    // Data annotation to reference that this property will be the primary key in the database's assignments entity.
     [Key]
-    // Data Annotation para cambiar el nombre de la columna en la base de datos.
+    // Data annotation to change the column name in the database.
     [Column("id")]
     public int Id { get; set; }
 
-    // Data Annotation para cambiar el nombre de la columna en la base de datos.
+    // Data annotation to change the column name in the database.
     [Column("name")]
-    // Data Annotation para indicar que esta propiedad debe ser NOT NULL en la base de datos.
+    // Data annotation to indicate that this property should be NOT NULL in the database.
     [Required]
-    // Data Annotation para indicar que esta propiedad debe tener una longitud máxima de 255 caracteres.
+    // Data annotation to indicate that this property should have a maximum length of 255 characters.
     [MaxLength(255, ErrorMessage = "The project name can't be longer than {1} characters.")]
-    // Data Annotation para indicar que esta propiedad debe tener una longitud mínima de 255 caracteres.
+    // Data annotation to indicate that this property should have a minimum length of 4 characters.
     [MinLength(4, ErrorMessage = "The project name can't be shorter than {1} characters.")]
     public string Name { get; set; }
 
-    // Data Annotation para cambiar el nombre de la columna en la base de datos.
+    // Data annotation to change the column name in the database.
     [Column("user_id")]
     public int UserId { get; set; }
 
-    // Data Annotation para hacer referencia a una foreignkey. Va a estar relacionado con la propiedad de UserId.
+    // Data annotation to reference a foreign key. It will be related to the UserId property.
     [ForeignKey("UserId")]
-    // Enlaces foraneos
+    // Foreign key links
     public User User { get; set; }
 }

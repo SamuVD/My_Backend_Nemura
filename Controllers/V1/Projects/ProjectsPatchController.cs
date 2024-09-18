@@ -1,4 +1,4 @@
-// Importamos las librerías necesarias para trabajar con Autorizaciones, controladores y el acceso a la base de datos, y los DTOS.
+// Import necessary libraries for working with authorizations, controllers, and database access, and DTOs.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBackendNemura.DataBase;
@@ -6,42 +6,42 @@ using MyBackendNemura.Dtos.Project;
 
 namespace MyBackendNemura.Controllers.V1.Projects;
 
-// Definimos el controlador para manejar las solicitudes relacionadas con la actualización parcial de proyectos.
-[Authorize] // Atributo para proteger el Endpoint
+// Define the controller to handle requests related to partial project updates.
+[Authorize] // Attribute to protect the endpoint
 [ApiController]
 [Route("api/v1/projects")]
 public class ProjectsPatchController : ControllerBase
 {
-    // Esta propiedad se utiliza para interactuar con la base de datos.
+    // This property is used to interact with the database.
     private readonly ApplicationDbContext Context;
 
-    // Constructor del controlador, donde inyectamos la instancia del contexto de la base de datos.
-    // El contexto es necesario para realizar operaciones CRUD sobre la base de datos.
+    // Constructor of the controller, where we inject the database context instance.
+    // The context is necessary to perform CRUD operations on the database.
     public ProjectsPatchController(ApplicationDbContext context)
     {
         Context = context;
     }
 
-    // Método para manejar solicitudes HTTP PATCH. Este método actualiza el nombre de un proyecto específico usando su ID.
+    // Method to handle HTTP PATCH requests. This method updates the name of a specific project using its ID.
     [HttpPatch("{id}")]
     public async Task<IActionResult> Patch([FromRoute] int id, ProjectPatchDto projectPatchDto)
     {
-        // Buscamos el proyecto en la base de datos por su ID. Si no lo encontramos, 'project' será null.
+        // Find the project in the database by its ID. If not found, 'project' will be null.
         var project = await Context.Projects.FindAsync(id);
 
-        // Si no encontramos el proyecto, devolvemos una respuesta con un estado 404 (Not Found).
+        // If the project is not found, return a 404 (Not Found) response.
         if (project == null)
         {
             return NotFound("The project was not found.");
         }
 
-        // Actualizamos el nombre del proyecto con el nuevo valor proporcionado en el DTO.
+        // Update the project name with the new value provided in the DTO.
         project.Name = projectPatchDto.Name;
 
-        // Guardamos los cambios en la base de datos de forma asíncrona.
+        // Save changes to the database asynchronously.
         await Context.SaveChangesAsync();
 
-        // Devolvemos una respuesta con un estado 200 (OK) indicando que el proyecto se actualizó exitosamente.
+        // Return a 200 (OK) response indicating that the project was updated successfully.
         return Ok("Project updated successfully.");
     }
 }

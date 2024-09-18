@@ -10,17 +10,17 @@ namespace MyBackendNemura.Controllers.V1.Users;
 [Route("api/v1/users")]
 public class UsersPutController : ControllerBase
 {
-    // Esta propiedad se utiliza para interactuar con la base de datos.
+    // This property is used to interact with the database.
     private readonly ApplicationDbContext Context;
 
-    // Constructor del controlador, donde inyectamos la instancia del contexto de la base de datos.
-    // El contexto es necesario para realizar operaciones CRUD sobre la base de datos.
+    // Controller constructor where we inject the database context instance.
+    // The context is necessary to perform CRUD operations on the database.
     public UsersPutController(ApplicationDbContext context)
     {
         Context = context;
     }
 
-    // Método para actualizar la información del usuario.
+    // Method to update user information.
     [HttpPut("{id}")]
     public async Task<IActionResult> Put([FromRoute] int id, UserPutDto userPutDto)
     {
@@ -37,6 +37,7 @@ public class UsersPutController : ControllerBase
        userFound.Email = userPutDto.Email;
 
        await Context.SaveChangesAsync();
-       return Ok("Info has been updated succesfully.");
+       return Ok("Info has been updated successfully.");
     }
 }
+
