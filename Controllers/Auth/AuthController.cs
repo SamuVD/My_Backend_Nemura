@@ -5,38 +5,76 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
-using MyBackendNemura.Dtos;
+using MyBackendNemura.Dtos.Auth;
 using MyBackendNemura.Models;
 using MyBackendNemura.DataBase;
 
 namespace MyBackendNemura.Controllers.Auth;
 
 [ApiController]
-[Route("api/v1/users")]
-public class AuthsPostController : ControllerBase
+[Route("api/v1/auths")]
+// Define un controlador de API en ASP.NET Core. Este controlador maneja las solicitudes HTTP dirigidas a la ruta "api/v1/auths".
+public class AuthController : ControllerBase
 {
     // Propiedad para acceder al contexto de la base de datos.
+    // `Context` es la propiedad que representa el acceso a la base de datos, permitiendo realizar operaciones sobre ella.
     private readonly ApplicationDbContext Context;
 
     // Propiedad para acceder a la configuración de la aplicación.
+    // `IConfiguration` permite acceder a configuraciones como claves, conexión a la base de datos o JWT.
     private readonly IConfiguration _configuration;
 
     // Propiedad para manejar el hashing de contraseñas.
+    // `PasswordHasher` se utiliza para hashear (encriptar) la contraseña del usuario antes de almacenarla.
     private readonly PasswordHasher<User> _passwordHasher;
 
     // Constructor del controlador.
     // Inicializa el contexto de la base de datos, la configuración y el passwordHasher.
-    public AuthsPostController(ApplicationDbContext context, IConfiguration configuration)
+    public AuthController(ApplicationDbContext context, IConfiguration configuration)
     {
-        Context = context;
-        _configuration = configuration;
-        _passwordHasher = new PasswordHasher<User>();
+        Context = context; // Se inyecta el contexto de la base de datos.
+        _configuration = configuration; // Se inyecta la configuración.
+        _passwordHasher = new PasswordHasher<User>(); // Inicializa el hasher de contraseñas.
     }
 
-    // Método para iniciar sesión de un usuario.
+    // Método POST que permite registrar un nuevo usuario.
+    [HttpPost("Register")]
+    // El atributo [HttpPost] indica que este método responderá a las solicitudes HTTP POST en la ruta "Register".
+    public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+    {
+        // Verificar si el modelo recibido en la solicitud es válido.
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState); // Si no es válido, devuelve un error 400 (Bad Request).
+        }
+
+        // Crear un nuevo objeto `User` a partir de los datos recibidos del DTO (Data Transfer Object).
+        var user = new User
+        {
+            Name = registerDto.Name,
+            LastName = registerDto.LastName,
+            NickName = registerDto.NickName,
+            Email = registerDto.Email,
+            Password = registerDto.Password // Esta contraseña aún no está encriptada.
+        };
+
+        // Instanciar el hasher de contraseñas para aplicar encriptación.
+        var passwordHash = new PasswordHasher<User>();
+
+        // Encriptar la contraseña del usuario antes de almacenarla en la base de datos.
+        user.Password = passwordHash.HashPassword(user, registerDto.Password);
+
+        // Añadir el nuevo usuario a la base de datos.
+        Context.Users.Add(user);
+        await Context.SaveChangesAsync(); // Guardar los cambios en la base de datos de forma asíncrona.
+
+        return Ok("User has been successfully registered."); // Responder con un mensaje de éxito.
+    }
+
+    // Método Post que permite loguear a un usuario.
     // Utiliza el atributo [HttpPost("Login")] para definir la ruta del endpoint.
     [HttpPost("Login")]
-    public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
+    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
         // Verifica si el modelo del DTO es válido.
         if (!ModelState.IsValid)
@@ -45,14 +83,14 @@ public class AuthsPostController : ControllerBase
         }
 
         // Busca al usuario en la base de datos por su NickName.
-        var user = await Context.Users.FirstOrDefaultAsync(item => item.NickName == userLoginDto.NickName);
+        var user = await Context.Users.FirstOrDefaultAsync(item => item.NickName == loginDto.NickName);
         if (user == null)
         {
             return Unauthorized("Invalid credentials.");
         }
 
         // Verifica si la contraseña proporcionada coincide con la contraseña hasheada en la base de datos.
-        var passwordResult = _passwordHasher.VerifyHashedPassword(user, user.Password, userLoginDto.Password);
+        var passwordResult = _passwordHasher.VerifyHashedPassword(user, user.Password, loginDto.Password);
         if (passwordResult == PasswordVerificationResult.Failed)
         {
             return Unauthorized("Invalid credentials.");

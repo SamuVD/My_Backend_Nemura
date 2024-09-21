@@ -1,6 +1,6 @@
-namespace MyBackendNemura.Dtos;
+namespace MyBackendNemura.Dtos.Auth;
 
-public class UserRegisterDto
+public class RegisterDto
 {
     public string Name { get; set; }
     public string LastName { get; set; }
