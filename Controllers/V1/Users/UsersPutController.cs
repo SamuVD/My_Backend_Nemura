@@ -8,7 +8,7 @@ namespace MyBackendNemura.Controllers.V1.Users;
 [Authorize]
 [ApiController]
 [Route("api/v1/users")]
-public class UsersPutController : ControllerBase
+public partial class UsersPutController : ControllerBase
 {
     // Esta propiedad se utiliza para interactuar con la base de datos.
     private readonly ApplicationDbContext Context;
